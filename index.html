@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Don Silvano - Alfajores Artesanales de Autor</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,600;1,700&display=swap"
+        rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cream: '#FFF8EF',
+                        creamback: '#FAF0E6',
+                        caramel: {
+                            light: '#E5A65D',
+                            DEFAULT: '#C67D33',
+                            dark: '#9A5212'
+                        },
+                        gold: '#DAA520',
+                        choco: {
+                            light: '#5D3A29',
+                            DEFAULT: '#3E2723',
+                            dark: '#2C1810'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Outfit', 'sans-serif']
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-12px) rotate(3deg)' }
+                        },
+                        drip: {
+                            '0%': { transform: 'scaleY(1)', opacity: '0.8' },
+                            '50%': { transform: 'scaleY(1.25)', opacity: '1' },
+                            '100%': { transform: 'scaleY(1)', opacity: '0.8' }
+                        },
+                        pulseGold: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(218, 165, 32, 0.3)' },
+                            '50%': { boxShadow: '0 0 25px rgba(218, 165, 32, 0.7)' }
+                        },
+                        spinSlow: {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' }
+                        }
+                    },
+                    animation: {
+                        'float-slow': 'float 6s ease-in-out infinite',
+                        'drip-slow': 'drip 3s ease-in-out infinite',
+                        'pulse-gold': 'pulseGold 2.5s infinite',
+                        'spin-slow': 'spinSlow 20s linear infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FFF8EF;
+            color: #2C1810;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Textura suave de fondo */
+        .bg-pattern {
+            background-image: radial-gradient(#C67D33 0.6px, transparent 0.6px), radial-gradient(#C67D33 0.6px, #FFF8EF 0.6px);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+            background-opacity: 0.05;
+        }
+
+        /* Sello Artesanal Flotante */
+        .stamp-badge {
+            border: 2px dashed #C67D33;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Glassmorphism cálido */
+        .glass-card {
+            background: rgba(255, 248, 239, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(198, 125, 51, 0.2);
+        }
+
+        /* Canvas de Partículas */
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Efecto de brillo de dorado */
+        .gold-shine {
+            background: linear-gradient(135deg, #C67D33 0%, #DAA520 50%, #9A5212 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #FAF0E6;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #C67D33;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9A5212;
+        }
+
+        .alfajor-shadow {
+            filter: drop-shadow(0 20px 25px rgba(44, 24, 16, 0.3));
+        }
+
+        .cta-button:not(:disabled) {
+            animation: cta-pulse 2.4s ease-in-out infinite;
+        }
+
+        .cta-button:hover:not(:disabled) {
+            animation: none;
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 10px 22px rgba(44, 24, 16, 0.28);
+        }
+
+        .cta-button [data-lucide] {
+            transition: transform 200ms ease;
+        }
+
+        .cta-button:hover:not(:disabled) [data-lucide] {
+            transform: scale(1.12);
+        }
+
+        @keyframes cta-pulse {
+            0%, 100% {
+                box-shadow: 0 4px 12px rgba(44, 24, 16, 0.16);
+            }
+            50% {
+                box-shadow: 0 7px 20px rgba(198, 125, 51, 0.4);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .cta-button:not(:disabled) {
+                animation: none;
+            }
+
+            .cta-button,
+            .cta-button [data-lucide] {
+                transition: none;
+            }
+        }
+
+        /* Custom Notification toast */
+        .toast-enter {
+            transform: translateY(100%) scale(0.9);
+            opacity: 0;
+        }
+
+        .toast-show {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body class="relative bg-pattern antialiased selection:bg-caramel selection:text-white">
+
+    <!-- Canvas para Partículas de Cacao Flotantes -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-40 w-full glass-card border-b border-caramel/10 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+
+            <!-- Logo Don Silvano -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div
+                    class="relative w-12 h-12 rounded-full bg-gradient-to-tr from-choco-dark to-caramel p-0.5 shadow-md transform group-hover:rotate-6 transition-transform">
+                    <div
+                        class="w-full h-full bg-cream rounded-full flex items-center justify-center border border-gold/40">
+                        <i data-lucide="cookie"
+                            class="w-7 h-7 text-caramel group-hover:scale-110 transition-transform"></i>
+                    </div>
+                </div>
+                <div>
+                    <span class="font-serif text-2xl font-bold tracking-tight text-choco-dark block leading-none">Don
+                        Silvano</span>
+                    <span class="text-[10px] tracking-widest text-caramel-dark font-semibold uppercase">Alfajores de
+                        Autor</span>
+                </div>
+            </a>
+
+            <!-- Links Navegación -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-choco hover:text-caramel transition-colors">
+                <a href="#catalogo" class="hover:text-caramel transition-colors">Variedades</a>
+                <a href="#armar-caja" class="hover:text-caramel transition-colors flex items-center gap-1">
+                    <span>Armá tu Caja</span>
+                    <span
+                        class="bg-caramel/10 text-caramel-dark text-xs px-2 py-0.5 rounded-full font-bold">¡Popular!</span>
+                </a>
+                <a href="#experiencia" class="hover:text-caramel transition-colors">El Secreto</a>
+                <a href="#resenas" class="hover:text-caramel transition-colors">Opiniones</a>
+            </nav>
+
+            <!-- Acciones / Carrito -->
+            <div class="flex items-center gap-4">
+                <button id="btn-open-cart"
+                    class="relative p-3 rounded-full bg-choco-dark text-cream hover:bg-caramel transition-all shadow-md hover:shadow-lg flex items-center justify-center">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span id="cart-badge"
+                        class="absolute -top-1 -right-1 bg-gold text-choco-dark font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center border-2 border-cream transition-transform transform scale-0">0</span>
+                </button>
+
+                <!-- Mobile menu toggle -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-choco hover:text-caramel focus:outline-none">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Mobile Desplegable -->
+        <div id="mobile-menu"
+            class="hidden md:hidden border-t border-caramel/10 bg-cream/95 backdrop-blur-md px-4 py-4 space-y-3">
+            <a href="#catalogo" class="block font-medium text-choco hover:text-caramel">Nuestros Alfajores</a>
+            <a href="#armar-caja" class="block font-medium text-caramel-dark font-bold">Armá tu Caja de Regalo</a>
+            <a href="#experiencia" class="block font-medium text-choco hover:text-caramel">El Arte del Relleno</a>
+            <a href="#resenas" class="block font-medium text-choco hover:text-caramel">Reseñas de Clientes</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-[calc(100vh-80px)] flex items-center justify-center py-12 lg:py-20 overflow-hidden">
+
+        <!-- Elementos decorativos flotantes -->
+        <div class="absolute top-10 left-10 w-24 h-24 bg-caramel/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="absolute bottom-10 right-10 w-40 h-40 bg-gold/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center relative z-10">
+
+            <!-- Columna Izquierda: Mensaje principal -->
+            <div class="space-y-6 text-center lg:text-left">
+                <div
+                    class="inline-flex items-center gap-2 bg-caramel/10 border border-caramel/20 px-4 py-1.5 rounded-full text-caramel-dark text-sm font-semibold tracking-wide animate-bounce">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-gold"></i>
+                    Receta Clásica Argentina • Elaboración Diaria
+                </div>
+
+                <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl font-extrabold text-choco-dark leading-tight">
+                    El secreto del verdadero <span class="gold-shine italic">Dulce de Leche</span> en cada capa.
+                </h1>
+
+                <p class="text-lg text-choco-light/90 max-w-xl mx-auto lg:mx-0 font-light leading-relaxed">
+                    Masa fina artesanal, fundente baño de cobertura premium y un corazón generoso de dulce de leche
+                    repostero de tambo propio. Una tentación inolvidable.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
+                    <a href="#catalogo"
+                        class="px-8 py-4 rounded-xl bg-choco-dark hover:bg-caramel text-cream font-semibold shadow-xl shadow-choco-dark/20 hover:shadow-caramel/30 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 group">
+                        <span>Probar Alfajores</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    <a href="#armar-caja"
+                        class="px-8 py-4 rounded-xl bg-cream border-2 border-caramel text-caramel-dark font-semibold hover:bg-caramel/10 transition-all flex items-center justify-center gap-2 shadow-sm">
+                        <i data-lucide="package-plus" class="w-5 h-5 text-caramel"></i>
+                        <span>Armá tu Caja Mixta</span>
+                    </a>
+                </div>
+
+                <!-- Sellos de confianza -->
+                <div
+                    class="pt-8 flex items-center justify-center lg:justify-start gap-8 border-t border-caramel/15 text-xs text-choco-light/80">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="award" class="w-5 h-5 text-gold"></i>
+                        <span>Cacao 70% Origen</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="heart" class="w-5 h-5 text-caramel"></i>
+                        <span>Sin Conservantes</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="truck" class="w-5 h-5 text-choco"></i>
+                        <span>Envíos a todo el país</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Render / Vista Interactiva del Alfajor -->
+            <div class="relative flex justify-center items-center">
+
+                <!-- Sello Rotativo Trasero -->
+                <div
+                    class="absolute -top-6 -right-2 sm:right-10 w-28 h-28 stamp-badge text-caramel-dark font-serif text-[10px] uppercase font-bold tracking-widest animate-spin-slow pointer-events-none hidden sm:flex">
+                    <div class="absolute inset-0 flex items-center justify-center text-center p-2">
+                        • Don Silvano • Receta Tradicional • Premium
+                    </div>
+                </div>
+
+                <!-- Contenedor Interactivo con simulación de Alfajor Cortado -->
+                <div id="interactive-hero-alfajor"
+                    class="relative group cursor-pointer p-6 sm:p-8 bg-gradient-to-b from-creamback to-cream rounded-3xl border border-gold/30 shadow-2xl">
+
+                    <div class="relative w-64 h-64 sm:w-80 sm:h-80 mx-auto flex items-center justify-center">
+
+                        <!-- Representación Visual del Alfajor Cortado -->
+                        <div class="relative w-full h-full flex items-center justify-center">
+                            <!-- Sombra suave -->
+                            <div class="absolute bottom-4 w-4/5 h-8 bg-choco-dark/20 rounded-full blur-xl"></div>
+
+                            <!-- Alfajor Base e Interactivo SVG Ilustrado -->
+                            <svg class="w-full h-full alfajor-shadow" viewBox="0 0 300 300" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <!-- Tapas y relleno -->
+                                <defs>
+                                    <linearGradient id="chocoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#3E2723" />
+                                        <stop offset="50%" stop-color="#2C1810" />
+                                        <stop offset="100%" stop-color="#1A0E0A" />
+                                    </linearGradient>
+                                    <linearGradient id="ddlGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#E5A65D" />
+                                        <stop offset="50%" stop-color="#C67D33" />
+                                        <stop offset="100%" stop-color="#9A5212" />
+                                    </linearGradient>
+                                    <linearGradient id="goldShine" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#DAA520" stop-opacity="0.8" />
+                                        <stop offset="50%" stop-color="#FFF" stop-opacity="0.9" />
+                                        <stop offset="100%" stop-color="#DAA520" stop-opacity="0.2" />
+                                    </linearGradient>
+                                </defs>
+
+                                <!-- Tapa Superior -->
+                                <path d="M 40 130 C 40 90, 260 90, 260 130 C 260 145, 40 145, 40 130 Z"
+                                    fill="url(#chocoGrad)" />
+                                <ellipse cx="150" cy="115" rx="100" ry="20" fill="url(#goldShine)" opacity="0.15" />
+
+                                <!-- Relleno Abundante de Dulce de Leche (Centro) -->
+                                <path
+                                    d="M 45 135 C 45 135, 150 142, 255 135 C 258 160, 252 170, 255 170 C 150 185, 45 175, 45 170 Z"
+                                    fill="url(#ddlGrad)" />
+
+                                <!-- Tapa Inferior -->
+                                <path d="M 45 168 C 45 168, 255 168, 255 168 C 255 195, 45 195, 45 168 Z"
+                                    fill="url(#chocoGrad)" />
+
+                                <!-- Chispas / Detalles de Cacao -->
+                                <circle cx="80" cy="120" r="3" fill="#DAA520" opacity="0.6" />
+                                <circle cx="210" cy="125" r="4" fill="#DAA520" opacity="0.5" />
+                                <circle cx="180" cy="110" r="2.5" fill="#FFF" opacity="0.4" />
+                            </svg>
+                        </div>
+
+                        <!-- Badge Flotante Interactivo -->
+                        <div
+                            class="absolute -bottom-2 bg-choco-dark/90 text-gold text-xs px-4 py-2 rounded-full border border-gold/40 shadow-lg flex items-center gap-2 group-hover:scale-110 transition-transform">
+                            <i data-lucide="mouse-pointer-click" class="w-4 h-4 text-caramel-light"></i>
+                            <span>Haz clic para ver el interior</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <h3 class="font-serif text-xl font-bold text-choco-dark">El Clásico Cacao Superbo</h3>
+                        <p class="text-xs text-caramel-dark font-medium mt-1">70% Cacao Intenso • Doble Relleno 80g</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Catálogo de Productos -->
+    <section id="catalogo" class="py-20 bg-creamback/60 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Encabezado de la Sección -->
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-caramel-dark font-bold text-sm tracking-widest uppercase">Nuestra Colección</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-extrabold text-choco-dark mt-2">
+                    Alfajores de Autor para Paladares Exigentes
+                </h2>
+                <p class="text-choco-light mt-3">
+                    Cada alfajor es elaborado manualmente con ingredientes seleccionados de primera calidad y sin
+                    conservantes artificiales.
+                </p>
+
+                <!-- Filtros de Categoría -->
+                <div class="flex flex-wrap justify-center gap-2 mt-8" id="filter-buttons">
+                    <button data-filter="all"
+                        class="filter-btn active px-5 py-2 rounded-full text-sm font-semibold bg-choco-dark text-cream shadow-md transition-all">Todos</button>
+                    <button data-filter="amargo"
+                        class="filter-btn px-5 py-2 rounded-full text-sm font-semibold bg-cream text-choco border border-caramel/20 hover:border-caramel transition-all">Chocolate
+                        Amargo</button>
+                    <button data-filter="blanco"
+                        class="filter-btn px-5 py-2 rounded-full text-sm font-semibold bg-cream text-choco border border-caramel/20 hover:border-caramel transition-all">Chocolate
+                        Blanco</button>
+                    <button data-filter="glaseado"
+                        class="filter-btn px-5 py-2 rounded-full text-sm font-semibold bg-cream text-choco border border-caramel/20 hover:border-caramel transition-all">Glaseados</button>
+                    <button data-filter="especial"
+                        class="filter-btn px-5 py-2 rounded-full text-sm font-semibold bg-cream text-choco border border-caramel/20 hover:border-caramel transition-all">Especiales
+                        de Autor</button>
+                </div>
+            </div>
+
+            <!-- Grilla de Alfajores -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="products-grid">
+                <!-- Se poblará dinámicamente con JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Experiencia: Armá tu Caja Personalizada -->
+    <section id="armar-caja" class="py-20 bg-cream relative overflow-hidden border-y border-caramel/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span
+                    class="bg-gold/20 text-choco-dark px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Experiencia
+                    Interactiva</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-extrabold text-choco-dark mt-3">
+                    Armá tu Caja Personalizada Don Silvano
+                </h2>
+                <p class="text-choco-light mt-2">
+                    Elegí el tamaño de tu caja de regalo y seleccioná tus sabores favoritos para completar cada espacio.
+                </p>
+            </div>
+
+            <!-- Panel Interactivo de la Caja -->
+            <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-xl border border-caramel/20 max-w-5xl mx-auto">
+
+                <!-- Selector de Tamaño de Caja -->
+                <div class="flex justify-center gap-4 mb-8">
+                    <button id="box-size-6" onclick="setBoxSize(6)"
+                        class="box-size-btn active px-6 py-3 rounded-2xl border-2 border-caramel bg-caramel/10 text-choco-dark font-bold flex items-center gap-2 transition-all">
+                        <i data-lucide="package" class="w-5 h-5 text-caramel"></i>
+                        <span>Caja x 6 Unidades</span>
+                    </button>
+                    <button id="box-size-12" onclick="setBoxSize(12)"
+                        class="box-size-btn px-6 py-3 rounded-2xl border-2 border-caramel/30 bg-cream text-choco font-bold flex items-center gap-2 hover:border-caramel transition-all">
+                        <i data-lucide="package-open" class="w-5 h-5 text-caramel"></i>
+                        <span>Caja x 12 Unidades (10% OFF)</span>
+                    </button>
+                </div>
+
+                <div class="grid lg:grid-cols-12 gap-8 items-start">
+
+                    <!-- Simulación Visual de la Caja con Slots -->
+                    <div class="lg:col-span-7 bg-creamback/80 rounded-2xl p-6 border-2 border-dashed border-caramel/30">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="font-serif font-bold text-choco-dark text-lg">Tu Caja de Regalo</span>
+                            <span id="box-status" class="text-sm font-semibold text-caramel-dark">0 / 6
+                                completados</span>
+                        </div>
+
+                        <!-- Slots Grid -->
+                        <div id="box-slots-container"
+                            class="grid grid-cols-3 sm:grid-cols-3 gap-4 min-h-[220px] items-center justify-center">
+                            <!-- Inyectado por JS -->
+                        </div>
+
+                        <div
+                            class="mt-6 flex justify-between items-center pt-4 border-t border-caramel/20 text-xs text-choco-light">
+                            <span>* Podés repetir tus alfajores preferidos</span>
+                            <button onclick="clearBox()"
+                                class="text-caramel-dark hover:underline flex items-center gap-1 font-semibold">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Vaciar caja
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Selección Rápida -->
+                    <div class="lg:col-span-5 space-y-3">
+                        <h4 class="font-serif font-bold text-choco-dark text-base mb-2">Hacé clic para agregar a la
+                            caja:</h4>
+                        <div id="box-picker-list" class="space-y-2 max-h-[320px] overflow-y-auto pr-1">
+                            <!-- Inyectado por JS -->
+                        </div>
+
+                        <!-- Resumen y Añadir -->
+                        <div class="pt-4 border-t border-caramel/20 space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-choco-light">Subtotal Caja:</span>
+                                <span id="box-price" class="font-bold text-xl text-choco-dark">$0.00</span>
+                            </div>
+                            <button id="add-box-to-cart-btn" onclick="addCustomBoxToCart()" disabled
+                                class="cta-button w-full py-3.5 rounded-xl bg-choco-dark text-cream font-bold opacity-50 cursor-not-allowed hover:bg-caramel transition-all flex items-center justify-center gap-2 shadow-lg">
+                                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                                <span>Agregar Caja al Carrito</span>
+                            </button>
+                            <p role="note" class="flex items-start gap-2 text-xs text-amber-800 bg-amber-100 border border-amber-300 rounded-lg px-3 py-2">
+                                <i data-lucide="triangle-alert" class="w-4 h-4 flex-shrink-0"></i>
+                                <span>Importante: para agregarla al carrito, la caja debe estar completa.</span>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Sección "El Arte del Relleno" -->
+    <section id="experiencia" class="py-20 bg-gradient-to-b from-creamback to-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-caramel-dark font-bold text-xs uppercase tracking-widest">Insumos de Excelencia</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-extrabold text-choco-dark mt-2">
+                    Anatomía de una Experiencia Don Silvano
+                </h2>
+                <p class="text-choco-light mt-3">
+                    Buscamos la perfección en cada detalle para garantizar ese equilibrio único entre crocantez,
+                    cremosidad y aroma.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Tarjeta 1 -->
+                <div
+                    class="glass-card p-8 rounded-3xl hover:border-caramel/50 transition-all duration-300 transform hover:-translate-y-2 shadow-md">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-caramel/10 flex items-center justify-center text-caramel-dark mb-6">
+                        <i data-lucide="disc" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-choco-dark mb-2">Tapas Suaves y Crocantes</h3>
+                    <p class="text-choco-light text-sm leading-relaxed">
+                        Horneadas a la temperatura justa con manteca de primera calidad, cacao amargo natural y notas de
+                        miel pura de azahar.
+                    </p>
+                </div>
+
+                <!-- Tarjeta 2 -->
+                <div
+                    class="glass-card p-8 rounded-3xl border-2 border-caramel/40 shadow-xl relative transform hover:-translate-y-2 transition-all duration-300">
+                    <div
+                        class="absolute -top-3 right-6 bg-gold text-choco-dark text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                        El Alma del Alfajor
+                    </div>
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-caramel/20 flex items-center justify-center text-caramel-dark mb-6">
+                        <i data-lucide="droplet" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-choco-dark mb-2">Dulce de Leche de Tambo</h3>
+                    <p class="text-choco-light text-sm leading-relaxed">
+                        Cocido a fuego lento durante horas. Con una textura sedosa, consistencia firme repostera y un
+                        brillo caramelo inigualable.
+                    </p>
+                </div>
+
+                <!-- Tarjeta 3 -->
+                <div
+                    class="glass-card p-8 rounded-3xl hover:border-caramel/50 transition-all duration-300 transform hover:-translate-y-2 shadow-md">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-caramel/10 flex items-center justify-center text-caramel-dark mb-6">
+                        <i data-lucide="sparkle" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold text-choco-dark mb-2">Chocolates Fino Cobertura</h3>
+                    <p class="text-choco-light text-sm leading-relaxed">
+                        Bañados por inmersión en fino chocolate amargo 70% o baño de glaseado cítrico artesanal que
+                        quiebra al primer mordisco.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reseñas de Clientes -->
+    <section id="resenas" class="py-20 bg-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <i data-lucide="heart-handshake" class="w-8 h-8 text-caramel mx-auto mb-2"></i>
+                <h2 class="font-serif text-3xl font-extrabold text-choco-dark">Lo que dicen nuestros clientes</h2>
+                <p class="text-choco-light mt-1">Más de 10,000 cajas entregadas en todo el país</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Reseña 1 -->
+                <div class="bg-creamback/70 p-6 rounded-2xl border border-caramel/10 space-y-4 shadow-sm">
+                    <div class="flex text-gold gap-1">
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                    </div>
+                    <p class="text-choco text-sm italic">"Probé el de 70% Cacao con Flor de Sal y no tiene comparación.
+                        La cantidad de dulce de leche que trae es impresionante."</p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <div
+                            class="w-10 h-10 rounded-full bg-caramel/20 flex items-center justify-center font-bold text-caramel-dark">
+                            MB
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-choco-dark">Mariana Beltrán</p>
+                            <p class="text-[10px] text-choco-light">Buenos Aires</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reseña 2 -->
+                <div class="bg-creamback/70 p-6 rounded-2xl border border-caramel/10 space-y-4 shadow-sm">
+                    <div class="flex text-gold gap-1">
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                    </div>
+                    <p class="text-choco text-sm italic">"La caja armada personalizada para regalar fue un éxito total.
+                        El packaging es súper delicado y llegaron impecables."</p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <div
+                            class="w-10 h-10 rounded-full bg-caramel/20 flex items-center justify-center font-bold text-caramel-dark">
+                            GC
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-choco-dark">Gonzalo Castro</p>
+                            <p class="text-[10px] text-choco-light">Córdoba</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reseña 3 -->
+                <div class="bg-creamback/70 p-6 rounded-2xl border border-caramel/10 space-y-4 shadow-sm">
+                    <div class="flex text-gold gap-1">
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-gold"></i>
+                    </div>
+                    <p class="text-choco text-sm italic">"El de Nieve de Merengue me recordó a las vacaciones en Mar del
+                        Plata pero con un toque artesanal mucho más fresco."</p>
+                    <div class="flex items-center gap-3 pt-2">
+                        <div
+                            class="w-10 h-10 rounded-full bg-caramel/20 flex items-center justify-center font-bold text-caramel-dark">
+                            SL
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-choco-dark">Sofia López</p>
+                            <p class="text-[10px] text-choco-light">Mendoza</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-choco-dark text-cream pt-16 pb-12 border-t border-gold/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="cookie" class="w-7 h-7 text-gold"></i>
+                    <span class="font-serif text-2xl font-bold tracking-tight text-cream">Don Silvano</span>
+                </div>
+                <p class="text-xs text-cream/70 leading-relaxed">
+                    Alfajores artesanales de autor elaborados con ingredientes de origen seleccionados. Sabor
+                    tradicional con distinción moderna.
+                </p>
+            </div>
+
+            <div>
+                <h4 class="font-serif font-bold text-gold text-sm mb-4 uppercase tracking-wider">Enlaces Rápido</h4>
+                <ul class="space-y-2 text-xs text-cream/80">
+                    <li><a href="#catalogo" class="hover:text-caramel-light transition-colors">Variedades de
+                            Alfajores</a></li>
+                    <li><a href="#armar-caja" class="hover:text-caramel-light transition-colors">Armar Caja de
+                            Regalo</a></li>
+                    <li><a href="#experiencia" class="hover:text-caramel-light transition-colors">Nuestros
+                            Ingredientes</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-serif font-bold text-gold text-sm mb-4 uppercase tracking-wider">Atención al Cliente
+                </h4>
+                <ul class="space-y-2 text-xs text-cream/80">
+                    <li class="flex items-center gap-2"><i data-lucide="phone" class="w-3.5 h-3.5 text-caramel"></i> +54
+                        9 11 5555-8888</li>
+                    <li class="flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5 text-caramel"></i>
+                        hola@donsilvano.com.ar</li>
+                    <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-caramel"></i>
+                        Av. Del Libertador 1240, CABA</li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-serif font-bold text-gold text-sm mb-4 uppercase tracking-wider">Seguinos</h4>
+                <p class="text-xs text-cream/70 mb-4">Sumate a nuestra comunidad alfajorera para promociones exclusivas.
+                </p>
+                <div class="flex gap-3">
+                    <a href="#"
+                        class="w-9 h-9 rounded-full bg-cream/10 hover:bg-caramel flex items-center justify-center transition-colors"><i
+                            data-lucide="instagram" class="w-4 h-4"></i></a>
+                    <a href="#"
+                        class="w-9 h-9 rounded-full bg-cream/10 hover:bg-caramel flex items-center justify-center transition-colors"><i
+                            data-lucide="facebook" class="w-4 h-4"></i></a>
+                    <a href="#"
+                        class="w-9 h-9 rounded-full bg-cream/10 hover:bg-caramel flex items-center justify-center transition-colors"><i
+                            data-lucide="message-circle" class="w-4 h-4"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-cream/10 text-center text-xs text-cream/50">
+            &copy; 2026 Don Silvano Alfajores Artesanales. Todos los derechos reservados.
+        </div>
+    </footer>
+
+    <!-- Drawer de Carrito (Offcanvas Cart) -->
+    <div id="cart-drawer-overlay"
+        class="fixed inset-0 bg-choco-dark/50 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300">
+    </div>
+    <div id="cart-drawer"
+        class="fixed top-0 right-0 h-full w-full sm:w-96 bg-cream shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+
+        <!-- Header Carrito -->
+        <div class="p-5 bg-choco-dark text-cream flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i data-lucide="shopping-bag" class="w-5 h-5 text-gold"></i>
+                <h3 class="font-serif font-bold text-lg">Tu Pedido</h3>
+            </div>
+            <button id="btn-close-cart"
+                class="p-1 rounded-lg text-cream/80 hover:text-cream hover:bg-cream/10 transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Contenido de Items -->
+        <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4">
+            <!-- Inyectado por JS -->
+        </div>
+
+        <!-- Footer Carrito / Totales -->
+        <div class="p-5 bg-creamback border-t border-caramel/20 space-y-4">
+            <div class="space-y-1.5 text-sm">
+                <div class="flex justify-between text-choco-light">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal">$0.00</span>
+                </div>
+                <div class="flex justify-between text-choco-light">
+                    <span>Envío</span>
+                    <span class="text-caramel-dark font-semibold">A calcular</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold text-choco-dark pt-2 border-t border-caramel/20">
+                    <span>Total</span>
+                    <span id="cart-total" class="text-caramel-dark">$0.00</span>
+                </div>
+            </div>
+
+            <button id="btn-checkout" onclick="checkoutWhatsApp()"
+                class="w-full py-4 rounded-xl bg-caramel hover:bg-caramel-dark text-cream font-bold transition-all shadow-lg flex items-center justify-center gap-2">
+                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                <span>Confirmar por WhatsApp</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal para Detalle / Corte Interior de Alfajor -->
+    <div id="detail-modal"
+        class="fixed inset-0 bg-choco-dark/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-cream rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-gold/30 transform scale-95 transition-transform duration-300"
+            id="detail-modal-card">
+            <button onclick="closeModal()"
+                class="absolute top-4 right-4 p-2 text-choco/60 hover:text-choco rounded-full">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <div id="modal-content">
+                <!-- Inyectado por JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Flotante -->
+    <div id="toast"
+        class="fixed bottom-6 left-6 z-50 glass-card border border-caramel/30 px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 toast-enter transition-all duration-300 max-w-sm">
+        <div
+            class="w-8 h-8 rounded-full bg-caramel/20 text-caramel-dark flex items-center justify-center flex-shrink-0">
+            <i data-lucide="bell" class="w-4 h-4"></i>
+        </div>
+        <div>
+            <p id="toast-title" class="text-xs font-bold text-choco-dark">Aviso</p>
+            <p id="toast-msg" class="text-[11px] text-choco-light"></p>
+        </div>
+    </div>
+
+    <script>
+        // --- BASE DE DATOS DE PRODUCTOS ---
+        const PRODUCTS = [
+            {
+                id: 'clasico-cacao',
+                name: 'El Clásico Cacao Superbo',
+                category: 'amargo',
+                price: 1800,
+                desc: 'Baño de chocolate amargo 70%, doble relleno de dulce de leche repostero de tambo.',
+                badge: 'Más Vendido',
+                badgeColor: 'bg-gold text-choco-dark',
+                ingredients: 'Cacao 70%, Dulce de Leche Repostero, Manteca, Harina de Trigo, Miel.',
+                cacaoPercent: '70%',
+                weight: '90g',
+                bgGradient: 'from-[#3E2723] to-[#2C1810]',
+                image: 'img/El%20Cl%C3%A1sico%20Cacao%20Superbo.png',
+                dripColor: '#C67D33'
+            },
+            {
+                id: 'nieve-merengue',
+                name: 'Nieve de Merengue',
+                category: 'glaseado',
+                price: 1650,
+                desc: 'Baño suave de glaseado de merengue cítrico crocante y dulce de leche cremoso.',
+                badge: 'Tradicional',
+                badgeColor: 'bg-cream text-choco-dark border border-caramel/30',
+                ingredients: 'Glaseado de Limón, Dulce de Leche, Manteca, Vainilla Natural.',
+                cacaoPercent: '0%',
+                weight: '85g',
+                bgGradient: 'from-[#FFF8EF] to-[#EAE0D5]',
+                image: 'img/Nieve%20de%20Merengue.png',
+                dripColor: '#DAA520'
+            },
+            {
+                id: 'nuez-caramelo',
+                name: 'Nuez & Caramelo Silvestre',
+                category: 'especial',
+                price: 2100,
+                desc: 'Masa fina de nuez picada, relleno cremoso y cobertura suave de chocolate con leche.',
+                badge: 'Especialidad',
+                badgeColor: 'bg-caramel text-cream',
+                ingredients: 'Nueces Seleccionadas, Dulce de Leche, Chocolate con Leche 45%.',
+                cacaoPercent: '45%',
+                weight: '95g',
+                bgGradient: 'from-[#5D3A29] to-[#3E2723]',
+                image: 'img/Nuez%20%26%20Caramelo%20Silvestre.png',
+                dripColor: '#E5A65D'
+            },
+            {
+                id: 'intenso-flor-sal',
+                name: '70% Cacao Intenso & Flor de Sal',
+                category: 'amargo',
+                price: 2200,
+                desc: 'Para paladares refinados con granos de sal marina salpicados sobre cobertura amarga.',
+                badge: 'Gourmet',
+                badgeColor: 'bg-choco-dark text-gold border border-gold/40',
+                ingredients: 'Chocolate Amargo 70%, Flor de Sal de Chubut, Dulce de Leche Extra Repostero.',
+                cacaoPercent: '70%',
+                weight: '90g',
+                bgGradient: 'from-[#2C1810] to-[#1A0E0A]',
+                image: 'img/Cacao%20Intenso%20%26%20Flor%20de%20Sal.png',
+                dripColor: '#9A5212'
+            },
+            {
+                id: 'frambuesa-blanco',
+                name: 'Frambuesa & Chocolate Blanco',
+                category: 'blanco',
+                price: 2050,
+                desc: 'Centro de dulce de frambuesa natural y dulce de leche envuelto en choco blanco puro.',
+                badge: 'Nuevo',
+                badgeColor: 'bg-red-800 text-cream',
+                ingredients: 'Chocolate Blanco Manteca de Cacao, Frambuesas de Patagonia, Dulce de Leche.',
+                cacaoPercent: 'Manteca 32%',
+                weight: '92g',
+                bgGradient: 'from-[#FAF0E6] to-[#F3D5C5]',
+                image: 'img/Frambuesa%20%26%20Chocolate%20Blanco.png',
+                dripColor: '#B91C1C'
+            },
+            {
+                id: 'blanco-valencia',
+                name: 'Chocolate Blanco & Naranja',
+                category: 'blanco',
+                price: 1950,
+                desc: 'Cobertura de chocolate blanco cremoso infusionado con cascaritas de naranja confitada.',
+                badge: 'Edición Limitada',
+                badgeColor: 'bg-amber-600 text-cream',
+                ingredients: 'Chocolate Blanco, Naranjas Confitadas, Dulce de Leche.',
+                cacaoPercent: 'Manteca 30%',
+                weight: '88g',
+                bgGradient: 'from-[#FFF8EF] to-[#FDE68A]',
+                image: 'img/Chocolate%20Blanco%20%26%20Naranja.png',
+                dripColor: '#D97706'
+            }
+        ];
+
+        // --- ESTADO DE LA APLICACIÓN ---
+        let cart = [];
+        let currentFilter = 'all';
+
+        // Estado Armador de Caja
+        let customBoxSize = 6;
+        let customBoxItems = [];
+
+        // --- INICIALIZACIÓN ---
+        window.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            renderBoxSlots();
+            renderBoxPickerList();
+            setupParticleCanvas();
+            lucide.createIcons();
+
+            // Interactividad Hero Card
+            document.getElementById('interactive-hero-alfajor').addEventListener('click', () => {
+                openModal('clasico-cacao');
+            });
+
+            // Listeners de Carrito
+            document.getElementById('btn-open-cart').addEventListener('click', openCart);
+            document.getElementById('btn-close-cart').addEventListener('click', closeCart);
+            document.getElementById('cart-drawer-overlay').addEventListener('click', closeCart);
+
+            // Listeners de Filtros
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active', 'bg-choco-dark', 'text-cream');
+                        b.classList.add('bg-cream', 'text-choco');
+                    });
+                    e.target.classList.add('active', 'bg-choco-dark', 'text-cream');
+                    e.target.classList.remove('bg-cream', 'text-choco');
+                    currentFilter = e.target.getAttribute('data-filter');
+                    renderProducts();
+                });
+            });
+
+            // Menú móvil
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                const menu = document.getElementById('mobile-menu');
+                menu.classList.toggle('hidden');
+            });
+
+        });
+
+        // --- RENDERIZADO DE PRODUCTOS ---
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            const filtered = currentFilter === 'all'
+                ? PRODUCTS
+                : PRODUCTS.filter(p => p.category === currentFilter);
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'glass-card rounded-3xl p-6 flex flex-col justify-between border border-caramel/20 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 group';
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="${p.badgeColor} text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">${p.badge}</span>
+                            <span class="text-xs font-semibold text-choco-light/80"><i data-lucide="scale" class="w-3.5 h-3.5 inline mr-1"></i>${p.weight}</span>
+                        </div>
+
+                        <!-- Imagen representativa del alfajor -->
+                        <div class="w-full h-44 rounded-2xl bg-gradient-to-br ${p.bgGradient} bg-cover bg-center flex items-center justify-center p-4 relative overflow-hidden my-3 shadow-inner group-hover:scale-[1.02] transition-transform" style="background-image: url('${p.image}')">
+                            <div class="absolute inset-0 bg-black/10"></div>
+                            
+                            <!-- Icono Central Representativo -->
+                            <div class="relative z-10 w-28 h-28 rounded-full bg-cream/10 border-2 border-gold/40 flex items-center justify-center shadow-xl backdrop-blur-xs">
+                                <i data-lucide="cookie" class="w-16 h-16 text-cream/90 group-hover:rotate-12 transition-transform duration-500"></i>
+                            </div>
+
+                            <button onclick="openModal('${p.id}')" class="absolute bottom-3 right-3 bg-cream/90 hover:bg-cream text-choco-dark text-xs font-bold px-3 py-1.5 rounded-lg backdrop-blur-sm shadow flex items-center gap-1 transition-all">
+                                <i data-lucide="eye" class="w-3.5 h-3.5 text-caramel"></i> Ver corte
+                            </button>
+                        </div>
+
+                        <h3 class="font-serif text-xl font-bold text-choco-dark mt-2">${p.name}</h3>
+                        <p class="text-choco-light text-xs mt-1 leading-relaxed line-clamp-2">${p.desc}</p>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-caramel/15 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-choco-light block">Precio x unidad</span>
+                            <span class="font-bold text-xl text-choco-dark">$${p.price.toLocaleString()}</span>
+                        </div>
+
+                        <button onclick="addToCart('${p.id}')" class="cta-button px-4 py-2.5 rounded-xl bg-choco-dark hover:bg-caramel text-cream font-semibold text-sm transition-all flex items-center gap-1.5 shadow-md hover:shadow-lg">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>Agregar</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // --- SIMULADOR DE CAJA PERSONALIZADA ---
+        function setBoxSize(size) {
+            customBoxSize = size;
+            customBoxItems = [];
+
+            document.querySelectorAll('.box-size-btn').forEach(btn => {
+                btn.classList.remove('active', 'border-caramel', 'bg-caramel/10', 'text-choco-dark');
+                btn.classList.add('border-caramel/30', 'bg-cream', 'text-choco');
+            });
+
+            if (size === 6) {
+                document.getElementById('box-size-6').classList.add('active', 'border-caramel', 'bg-caramel/10', 'text-choco-dark');
+            } else {
+                document.getElementById('box-size-12').classList.add('active', 'border-caramel', 'bg-caramel/10', 'text-choco-dark');
+            }
+
+            renderBoxSlots();
+            updateBoxSummary();
+        }
+
+        function renderBoxSlots() {
+            const container = document.getElementById('box-slots-container');
+            container.innerHTML = '';
+
+            for (let i = 0; i < customBoxSize; i++) {
+                const item = customBoxItems[i];
+                const slot = document.createElement('div');
+
+                if (item) {
+                    slot.className = 'w-full h-20 rounded-xl bg-cream border-2 border-caramel p-2 flex items-center justify-between relative shadow-sm animate-fade-in';
+                    slot.innerHTML = `
+                        <div class="flex items-center gap-2 overflow-hidden">
+                            <div class="w-8 h-8 rounded-full bg-choco-dark flex items-center justify-center text-gold text-xs font-bold flex-shrink-0">
+                                <i data-lucide="cookie" class="w-4 h-4"></i>
+                            </div>
+                            <span class="text-xs font-bold text-choco-dark truncate">${item.name}</span>
+                        </div>
+                        <button onclick="removeBoxItem(${i})" class="text-red-500 hover:text-red-700 p-1 flex-shrink-0">
+                            <i data-lucide="x-circle" class="w-4 h-4"></i>
+                        </button>
+                    `;
+                } else {
+                    slot.className = 'w-full h-20 rounded-xl border-2 border-dashed border-caramel/30 flex flex-col items-center justify-center text-caramel/50 text-xs font-medium bg-cream/30';
+                    slot.innerHTML = `
+                        <i data-lucide="plus" class="w-4 h-4 mb-0.5"></i>
+                        <span>Espacio ${i + 1}</span>
+                    `;
+                }
+                container.appendChild(slot);
+            }
+
+            document.getElementById('box-status').innerText = `${customBoxItems.length} / ${customBoxSize} completados`;
+            lucide.createIcons();
+        }
+
+        function renderBoxPickerList() {
+            const list = document.getElementById('box-picker-list');
+            list.innerHTML = '';
+
+            PRODUCTS.forEach(p => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between p-2.5 rounded-xl bg-cream hover:bg-caramel/10 border border-caramel/15 cursor-pointer transition-colors';
+                row.onclick = () => addBoxItem(p);
+
+                row.innerHTML = `
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-7 h-7 rounded-full bg-caramel/20 flex items-center justify-center text-caramel-dark font-bold text-xs">
+                            <i data-lucide="cookie" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-choco-dark">${p.name}</p>
+                            <p class="text-[10px] text-choco-light">$${p.price.toLocaleString()}</p>
+                        </div>
+                    </div>
+                    <button class="px-2.5 py-1 rounded-lg bg-choco-dark text-cream text-xs font-semibold hover:bg-caramel transition-colors">
+                        + Añadir
+                    </button>
+                `;
+                list.appendChild(row);
+            });
+            lucide.createIcons();
+        }
+
+        function addBoxItem(product) {
+            if (customBoxItems.length < customBoxSize) {
+                customBoxItems.push(product);
+                renderBoxSlots();
+                updateBoxSummary();
+            } else {
+                showToast('Caja Completa', '¡Ya alcanzaste el máximo de unidades para esta caja!');
+            }
+        }
+
+        function removeBoxItem(index) {
+            customBoxItems.splice(index, 1);
+            renderBoxSlots();
+            updateBoxSummary();
+        }
+
+        function clearBox() {
+            customBoxItems = [];
+            renderBoxSlots();
+            updateBoxSummary();
+        }
+
+        function updateBoxSummary() {
+            let total = customBoxItems.reduce((acc, curr) => acc + curr.price, 0);
+
+            // Aplicar 10% descuento si es caja de 12
+            if (customBoxSize === 12 && customBoxItems.length === 12) {
+                total = total * 0.90;
+            }
+
+            document.getElementById('box-price').innerText = `$${Math.round(total).toLocaleString()}`;
+
+            const btn = document.getElementById('add-box-to-cart-btn');
+            if (customBoxItems.length === customBoxSize) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                btn.classList.add('hover:bg-caramel');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function addCustomBoxToCart() {
+            if (customBoxItems.length !== customBoxSize) return;
+
+            let total = customBoxItems.reduce((acc, curr) => acc + curr.price, 0);
+            if (customBoxSize === 12) total = total * 0.90;
+
+            const boxItem = {
+                id: 'custom-box-' + Date.now(),
+                name: `Caja Mixta x ${customBoxSize} Unidades`,
+                price: Math.round(total),
+                quantity: 1,
+                details: customBoxItems.map(i => i.name).join(', ')
+            };
+
+            cart.push(boxItem);
+            updateCartUI();
+            openCart();
+            clearBox();
+            showToast('¡Caja agregada!', 'Tu caja personalizada ya está en el carrito.');
+        }
+
+        // --- CARRITO DE COMPRAS ---
+        function addToCart(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    quantity: 1
+                });
+            }
+
+            updateCartUI();
+            openCart();
+            showToast('Producto agregado', `${product.name} se sumó al carrito.`);
+        }
+
+        function updateCartQuantity(id, change) {
+            const item = cart.find(i => i.id === id);
+            if (!item) return;
+
+            item.quantity += change;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== id);
+            }
+            updateCartUI();
+        }
+
+        function removeCartItem(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const badge = document.getElementById('cart-badge');
+            container.innerHTML = '';
+
+            const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+            // Badge animación
+            if (totalItems > 0) {
+                badge.innerText = totalItems;
+                badge.classList.remove('scale-0');
+                badge.classList.add('scale-100');
+            } else {
+                badge.classList.remove('scale-100');
+                badge.classList.add('scale-0');
+            }
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-choco-light/70">
+                        <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-3 opacity-40"></i>
+                        <p class="font-medium text-sm">Tu carrito está vacío</p>
+                        <p class="text-xs mt-1">¡Elegí tus alfajores favoritos para comenzar!</p>
+                    </div>
+                `;
+            } else {
+                cart.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = 'flex items-center justify-between p-3 rounded-2xl bg-creamback/80 border border-caramel/15 shadow-sm';
+                    row.innerHTML = `
+                        <div class="space-y-0.5 max-w-[180px]">
+                            <h4 class="font-bold text-xs text-choco-dark truncate">${item.name}</h4>
+                            ${item.details ? `<p class="text-[10px] text-choco-light line-clamp-1">${item.details}</p>` : ''}
+                            <span class="text-xs text-caramel-dark font-semibold">$${(item.price * item.quantity).toLocaleString()}</span>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-2 bg-cream rounded-xl p-1 border border-caramel/20">
+                                <button onclick="updateCartQuantity('${item.id}', -1)" class="w-6 h-6 rounded-lg bg-caramel/10 text-choco font-bold text-xs flex items-center justify-center hover:bg-caramel hover:text-cream transition-colors">-</button>
+                                <span class="text-xs font-bold w-4 text-center text-choco-dark">${item.quantity}</span>
+                                <button onclick="updateCartQuantity('${item.id}', 1)" class="w-6 h-6 rounded-lg bg-caramel/10 text-choco font-bold text-xs flex items-center justify-center hover:bg-caramel hover:text-cream transition-colors">+</button>
+                            </div>
+                            <button onclick="removeCartItem('${item.id}')" aria-label="Eliminar ${item.name} del carrito" title="Eliminar del carrito" class="w-7 h-7 rounded-lg text-red-600 hover:bg-red-100 flex items-center justify-center transition-colors">
+                                <i data-lucide="x" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+
+            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            document.getElementById('cart-subtotal').innerText = `$${subtotal.toLocaleString()}`;
+            document.getElementById('cart-total').innerText = `$${subtotal.toLocaleString()}`;
+
+            lucide.createIcons();
+        }
+
+        function openCart() {
+            document.getElementById('cart-drawer-overlay').classList.remove('opacity-0', 'pointer-events-none');
+            document.getElementById('cart-drawer').classList.remove('translate-x-full');
+        }
+
+        function closeCart() {
+            document.getElementById('cart-drawer-overlay').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('cart-drawer').classList.add('translate-x-full');
+        }
+
+        // --- CHECKOUT VIA WHATSAPP ---
+        function checkoutWhatsApp() {
+            if (cart.length === 0) {
+                alert('Tu carrito está vacío. Agregá productos antes de confirmar.');
+                return;
+            }
+
+            let msg = '¡Hola Don Silvano! Quisiera realizar el siguiente pedido:\n\n';
+            cart.forEach(item => {
+                msg += `• *${item.name}* x${item.quantity} - $${(item.price * item.quantity).toLocaleString()}\n`;
+                if (item.details) msg += `  _${item.details}_\n`;
+            });
+
+            const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            msg += `\n*Total estimado: $${total.toLocaleString()}*`;
+            msg += '\n\nQuedo a la espera para coordinar el envío y pago. ¡Gracias!';
+
+            const url = `https://wa.me/5491155558888?text=${encodeURIComponent(msg)}`;
+            showToast('¡Gracias por tu pedido!', 'Te estamos dirigiendo a WhatsApp para finalizarlo.');
+            const whatsappWindow = window.open(url, '_blank');
+            if (!whatsappWindow) {
+                window.location.href = url;
+            }
+        }
+
+        // --- MODAL DE CORTE INTERIOR ---
+        function openModal(productId) {
+            const p = PRODUCTS.find(prod => prod.id === productId);
+            if (!p) return;
+
+            const modalContent = document.getElementById('modal-content');
+            modalContent.innerHTML = `
+                <div class="text-center">
+                    <span class="${p.badgeColor} text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider inline-block mb-3">${p.badge}</span>
+                    <h3 class="font-serif text-2xl font-bold text-choco-dark">${p.name}</h3>
+                    <p class="text-xs text-caramel-dark font-medium mt-1">Sabor único Don Silvano</p>
+
+                    <!-- Simulación Visual Corte Interior -->
+                    <div class="my-6 p-6 rounded-2xl bg-gradient-to-br ${p.bgGradient} relative overflow-hidden flex items-center justify-center shadow-inner">
+                        <div class="space-y-2 text-center text-cream relative z-10">
+                            <div class="w-full h-12 bg-choco-dark/80 rounded-xl border border-gold/30 flex items-center justify-center text-xs font-serif text-gold">
+                                Tapa Superior Fina
+                            </div>
+                            <div class="w-full h-16 bg-caramel rounded-xl border-2 border-gold flex flex-col items-center justify-center shadow-lg transform scale-105">
+                                <span class="text-xs font-bold text-cream uppercase">Doble Relleno Generoso</span>
+                                <span class="text-[10px] text-cream/80">${p.desc}</span>
+                            </div>
+                            <div class="w-full h-12 bg-choco-dark/80 rounded-xl border border-gold/30 flex items-center justify-center text-xs font-serif text-gold">
+                                Tapa Inferior Suave
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-left space-y-2 bg-creamback/80 p-4 rounded-xl border border-caramel/20 text-xs mb-6">
+                        <p class="text-choco font-bold">Ingredientes seleccionados:</p>
+                        <p class="text-choco-light leading-relaxed">${p.ingredients}</p>
+                        <div class="flex justify-between pt-2 text-[11px] text-caramel-dark font-semibold border-t border-caramel/10">
+                            <span>Cobertura: ${p.cacaoPercent}</span>
+                            <span>Peso neto: ${p.weight}</span>
+                        </div>
+                    </div>
+
+                    <button onclick="addToCart('${p.id}'); closeModal();" class="cta-button w-full py-3.5 rounded-xl bg-choco-dark hover:bg-caramel text-cream font-bold transition-all shadow-lg flex items-center justify-center gap-2">
+                        <i data-lucide="plus" class="w-5 h-5"></i>
+                        <span>Agregar al Carrito ($${p.price.toLocaleString()})</span>
+                    </button>
+                </div>
+            `;
+
+            lucide.createIcons();
+            const modal = document.getElementById('detail-modal');
+            const card = document.getElementById('detail-modal-card');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-95');
+            card.classList.add('scale-100');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('detail-modal');
+            const card = document.getElementById('detail-modal-card');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // --- NOTIFICACIONES DE ACCIONES DEL CARRITO ---
+        function showToast(title, msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-msg').innerText = msg;
+
+            toast.classList.remove('toast-enter');
+            toast.classList.add('toast-show');
+
+            setTimeout(() => {
+                toast.classList.remove('toast-show');
+                toast.classList.add('toast-enter');
+            }, 4000);
+        }
+
+        // --- CANVAS DE PARTÍCULAS CÁLIDAS DE CACAO ---
+        function setupParticleCanvas() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const particles = [];
+            const particleCount = 25;
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 3 + 1,
+                    color: Math.random() > 0.5 ? 'rgba(198, 125, 51, 0.25)' : 'rgba(218, 165, 32, 0.2)',
+                    vy: Math.random() * -0.5 - 0.2,
+                    vx: Math.random() * 0.4 - 0.2
+                });
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, width, height);
+
+                particles.forEach(p => {
+                    p.y += p.vy;
+                    p.x += p.vx;
+
+                    if (p.y < 0) p.y = height;
+                    if (p.x < 0) p.x = width;
+                    if (p.x > width) p.x = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(animateParticles);
+            }
+
+            animateParticles();
+        }
+    </script>
+</body>
+
+</html>
